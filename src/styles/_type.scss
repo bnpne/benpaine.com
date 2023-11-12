@@ -1,0 +1,34 @@
+@font-face {
+  font-family: 'ABN Condensed';
+  src: url('/fonts/ABN-Condensed.woff2') format('woff2')
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
+}
+
+@mixin displayType {
+  font-family: 'ABN Condensed';
+  font-size: 10.8rem;
+  line-height: 99%;
+  text-transform: uppercase;
+  letter-spacing: 0.544px;
+}
+
+@mixin miniDisplayType {
+  font-family: 'ABN Condensed';
+  letter-spacing: 0.544px;
+  font-size: 5rem;
+  line-height: 99%;
+  text-transform: uppercase;
+}
+
+
+@mixin bodyType {
+  font-family: 'PP Neue Montreal';
+  font-size: 2rem;
+  line-height: 99%;
+  font-weight: 500;
+  text-transform: uppercase;
+}

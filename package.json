@@ -1,0 +1,25 @@
+{
+  "name": "neue-boiler",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bunx --bun vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@studio-freight/lenis": "latest",
+    "events": "^3.3.0",
+    "gsap": "^3.12.2",
+    "path": "^0.12.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sanity": "latest",
+    "sass": "^1.66.1",
+    "styled-components": "^6.0.8",
+    "three": "^0.156.1",
+    "vite": "^4.4.5",
+    "vite-plugin-glsl": "^1.1.2"
+  }
+}

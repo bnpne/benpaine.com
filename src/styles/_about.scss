@@ -1,0 +1,8 @@
+.about {
+  padding: 4rem;
+  @include bodyType;
+
+  h1 {
+    margin-top: 8rem;
+  }
+}

@@ -1,0 +1,20 @@
+.nav {
+  @include bodyType;
+  position: sticky;
+  z-index: 2;
+  top: 4rem;
+  left: 4rem;
+  right: 4rem;
+  width: calc(100% - 8rem);
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .links {
+      display: flex;
+    }
+  }
+
+}
