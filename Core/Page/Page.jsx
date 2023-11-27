@@ -52,4 +52,6 @@ export default class Page {
   }
 
   resize() { }
+
+  scroll() { }
 }

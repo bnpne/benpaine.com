@@ -31,6 +31,7 @@ export default class Preloader {
   async load() {
     await this.loadPages().then(async () => {
       await STORE.router.inject().then(async () => {
+        STORE.home.init()
         this.loaded()
       })
     })
@@ -47,10 +48,12 @@ export default class Preloader {
         const imgWrapper = document.createElement("div")
         imgWrapper.classList.add("home__grid--row__item")
         const imgEl = document.createElement("img")
+        imgEl.classList.add("home__grid--row__item--img")
 
         const images = await getHomeImages()
 
         const meshArray = []
+        const mediaArray = []
 
         for (let index = 0; index < images.length; index += 2) {
           const assetOne = images[index].image.asset
@@ -68,6 +71,27 @@ export default class Preloader {
           const wElOne = imgEl.cloneNode()
           wElOne.src = assetOne
 
+          wElOne.addEventListener("click", () => {
+            console.log(meshOne)
+          })
+          let gsOne = meshOne.material.uniforms.grayscale
+          wElOne.addEventListener("mouseenter", () => {
+            piezo({
+              targets: gsOne,
+              value: 1,
+              duration: 700,
+              easing: "easeOutExpo",
+            })
+          })
+          wElOne.addEventListener("mouseleave", () => {
+            piezo({
+              targets: gsOne,
+              value: 2,
+              duration: 700,
+              easing: "easeOutExpo",
+            })
+          })
+
           wOne.appendChild(wElOne)
 
           const u = row.cloneNode()
@@ -75,6 +99,7 @@ export default class Preloader {
           u.appendChild(wOne)
 
           meshArray.push(meshOne)
+          mediaArray.push(wOne)
 
           if (images[index + 1]) {
             const assetTwo = images[index + 1].image.asset
@@ -91,16 +116,39 @@ export default class Preloader {
             const wElTwo = imgEl.cloneNode()
             wElTwo.src = assetTwo
 
+            wElTwo.addEventListener("click", () => {
+              console.log(meshTwo)
+            })
+            let gsTwo = meshTwo.material.uniforms.grayscale
+            wElTwo.addEventListener("mouseenter", () => {
+              piezo({
+                targets: gsTwo,
+                value: 1,
+                duration: 700,
+                easing: "easeOutExpo",
+              })
+            })
+            wElTwo.addEventListener("mouseleave", () => {
+              piezo({
+                targets: gsTwo,
+                value: 0,
+                duration: 700,
+                easing: "easeOutExpo",
+              })
+            })
+
             wTwo.appendChild(wElTwo)
 
             u.appendChild(wTwo)
 
-            meshArray.push(meshOne)
+            meshArray.push(meshTwo)
+            mediaArray.push(wTwo)
           }
 
           grid.appendChild(u)
         }
         STORE.home.webgl = meshArray
+        STORE.home.media = mediaArray
       }
 
       resolve()
@@ -131,6 +179,7 @@ export default class Preloader {
         texture: element.tex,
         imageBounds: [element.dimensions.width, element.dimensions.height],
         scale: [element.dimensions.width, element.dimensions.height],
+        grayscale: 0,
       })
 
       const mesh = new THREE.Mesh(plane, material.material)

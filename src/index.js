@@ -79,7 +79,6 @@ class App {
   }
 
   init() {
-    // STORE.allez = new Allez()
     STORE.lenis = new Lenis({
       lerp: 0.1,
       wrapper: this.main,
@@ -90,9 +89,9 @@ class App {
       STORE.lenis.raf(time)
     }, 0)
 
-    STORE.lenis.on("scroll", ({ scroll }) => console.log(scroll))
+    STORE.lenis.on("scroll", ({ scroll }) => this.scroll())
 
-    this.resize()
+    // this.resize()
     this.listeners()
     this.linkListeners()
 
@@ -137,6 +136,10 @@ class App {
   popState() {
     STORE.dispatch("setUrl", [window.location.pathname])
     STORE.router.route()
+  }
+
+  scroll() {
+    STORE.router.tree.currentPage.scroll()
   }
 
   resize() {

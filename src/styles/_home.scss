@@ -7,7 +7,7 @@
   &__container {
     box-sizing: border-box;
     width: 100%;
-    padding: 5rem 3.2rem 25rem;
+    padding: 5rem 3.2rem;
 
   }
 
@@ -29,12 +29,13 @@
         aspect-ratio: 1/1;
         height: 4vw;
         max-height: 7vw;
-        background-color: burlywood;
 
-        >img {
+        &--img {
           height: 100%;
           width: 100%;
           object-fit: cover;
+          opacity: 0;
+          cursor: pointer;
         }
       }
 
