@@ -4,4 +4,7 @@
   overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
   overflow: auto;
+  display: block;
+  position: relative;
+  z-index: 2;
 }

@@ -1,28 +1,22 @@
 import { defineConfig } from "sanity"
 import { deskTool } from "sanity/desk"
+import { visionTool } from "@sanity/vision"
+import { schemaTypes } from "./schemas"
+import { deskStructure } from "./structures/deskStructure"
 
 export const config = defineConfig({
-  plugins: [deskTool()],
   name: "studio",
-  projectId: "i51yibay",
+  projectId: "v5fhyeiw",
   dataset: "production",
   basePath: "/admin",
+  plugins: [
+    deskTool({
+      structure: deskStructure,
+    }),
+    ,
+    visionTool(),
+  ],
   schema: {
-    types: [
-      {
-        type: "document",
-        name: "post",
-        title: "Post",
-        fields: [
-          {
-            type: "string",
-            name: "title",
-            title: "Title",
-          },
-        ],
-      },
-    ],
+    types: schemaTypes,
   },
 })
-
-// // // This assumes that there is a <div id="app"></div> node in the HTML structure where this code is executed.

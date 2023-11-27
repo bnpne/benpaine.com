@@ -28,15 +28,30 @@
     <main id="main">
       <div id="app">
         <nav class="nav" id="nav">
-          <div class="nav-container">
-            <a class="hover-ting" href="/">Home</a>
-            <a class="hover-ting" href="/about">About</a>
+          <div class="nav__container">
+            <div class="nav__container--colophan">
+              <div class="nav__item">
+                <a href="/">Ben Paine</a>
+              </div>
+              <div class="nav__item">
+                <p>Web Dev & Design</p>
+              </div>
+            </div>
+            <div class="nav__container--links">
+              <div class="nav__item"><a href="/">Work,</a>&nbsp;</div>
+              <div class="nav__item"><a href="/">Information,</a>&nbsp;</div>
+              <div class="nav__item">
+                <a href="/">Writing</a>
+              </div>
+            </div>
           </div>
         </nav>
       </div>
+
       <canvas id="r"></canvas>
     </main>
     <div id="admin"></div>
+
     <script type="module" src="/src/index.js" defer></script>
   </body>
 </html>

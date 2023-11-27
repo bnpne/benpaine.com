@@ -141,7 +141,7 @@ class App {
 
   resize() {
     this.canvas && this.canvas.resize()
-    STORE.allez && STORE.allez.checkResize()
+    STORE.router.tree.currentPage.resize()
   }
 
   loop() {

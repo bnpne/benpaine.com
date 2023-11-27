@@ -1,8 +1,9 @@
 :root {
   font-family: "Helvetica Neue", system-ui, Avenir, Helvetica, Arial, sans-serif;
 
-  color: black;
-  background-color: white;
+
+  color: $main-text;
+  background-color: $main-background;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -98,8 +99,6 @@ video {
   border: 0;
   font-size: 100%;
   vertical-align: baseline;
-
-  will-change: transform;
   box-sizing: border-box;
 }
 
@@ -113,7 +112,7 @@ body {
   min-height: 100vh;
 
   a {
-    color: black;
+    color: $main-text;
     text-decoration: none;
     cursor: pointer;
   }
@@ -127,6 +126,8 @@ body {
   z-index: 2;
   box-sizing: border-box;
   width: 100%;
+
+  display: flex;
 }
 
 #main {
@@ -166,7 +167,6 @@ body {
 div,
 span {
   display: block;
-  overflow: hidden;
 }
 
 ul,
