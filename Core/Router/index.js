@@ -19,12 +19,14 @@ export default class Router {
       if (page) {
         this.addToDom(this.pagesParent, page.template)
         page.active = true
+        page.onInject()
         resolve()
       } else {
         if (STORE.url) {
           this.tree.currentPage = this.pages[STORE.url]
           this.addToDom(this.pagesParent, this.tree.currentPage.template)
           this.tree.currentPage.active = true
+          this.tree.currentPage.onInject()
           resolve()
         } else {
           reject()
@@ -75,7 +77,7 @@ export default class Router {
       this.url = STORE.url
       this.tree.newPage = this.pages[this.url]
 
-      await this.hidePage()
+      await this.hidePage(this.tree.currentPage)
         .then(async () => {
           await this.updateCurrentPage(this.tree.newPage)
         })
@@ -83,7 +85,10 @@ export default class Router {
           await this.remove(this.tree.oldPage)
         })
         .then(async () => {
-          await this.inject(this.tree.newPage)
+          await this.inject(this.tree.currentPage)
+        })
+        .then(async () => {
+          await this.showPage(this.tree.currentPage)
         })
         .catch((err) => {
           console.error(err)
@@ -93,15 +98,15 @@ export default class Router {
     }
   }
 
-  async showPage() {
-    if (this.tree.currentPage) {
-      await this.tree.currentPage.in()
+  async showPage(page) {
+    if (page) {
+      await page.in()
     }
   }
 
-  async hidePage() {
-    if (this.tree.currentPage) {
-      await this.tree.currentPage.out()
+  async hidePage(page) {
+    if (page) {
+      await page.out()
     }
   }
 

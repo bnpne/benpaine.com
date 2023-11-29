@@ -65,6 +65,14 @@ export default class Canvas {
     this.resize()
   }
 
+  compile() {
+    this.renderer.compile(this.scene, this.camera)
+  }
+
+  initTexture(tex) {
+    this.renderer.initTexture(tex)
+  }
+
   resize() {
     this.screen = {
       width: window.innerWidth,

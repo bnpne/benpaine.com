@@ -10,19 +10,33 @@ export default class Preloader {
     this.preloader = el
     this.pageParent = pagesParent
 
+    this.navWords = Array.prototype.slice.call(
+      document.querySelectorAll("[data-word]")
+    )
+
     this.em = new Emitter()
     this.pageLoaded = false
 
     STORE.preloadTimeline = piezo.timeline({
-      easing: "easeOutExpo",
+      easing: function () {
+        return function (x) {
+          return Math.sqrt(1 - Math.pow(x - 1, 2))
+        }
+      },
       duration: 700,
     })
 
-    STORE.preloadTimeline.add({
-      targets: this.preloader,
-      opacity: [1, 0],
-      delay: 1000,
-    })
+    STORE.preloadTimeline
+      .add({
+        targets: this.preloader,
+        opacity: [1, 0],
+        delay: 1000,
+      })
+      .add({
+        targets: this.navWords,
+        delay: piezo.stagger(20),
+        translateY: ["100%", "0%"],
+      })
     STORE.preloadTimeline.pause()
 
     this.load()
@@ -31,7 +45,7 @@ export default class Preloader {
   async load() {
     await this.loadPages().then(async () => {
       await STORE.router.inject().then(async () => {
-        STORE.home.init()
+        STORE.router.tree.currentPage.init()
         this.loaded()
       })
     })
@@ -49,17 +63,28 @@ export default class Preloader {
         imgWrapper.classList.add("home__grid--row__item")
         const imgEl = document.createElement("img")
         imgEl.classList.add("home__grid--row__item--img")
+        const display = template.querySelector(".home__display--item")
+
+        const displayMesh = this.loadDisplay(display)
+        const displayMaterial = new THREE.MeshBasicMaterial({
+          transparent: true,
+          color: 0xf4f6f5,
+        })
+        displayMaterial.name = "display__material"
+        displayMesh.material = displayMaterial
 
         const images = await getHomeImages()
 
         const meshArray = []
         const mediaArray = []
+        this.materialArray = []
 
         for (let index = 0; index < images.length; index += 2) {
           const assetOne = images[index].image.asset
           const paletteOne = images[index].image.palette
           const dimensionsOne = images[index].image.dimensions
           const texOne = await this.loadTexture(assetOne)
+          STORE.canvas.initTexture(texOne)
           const elementOne = {
             tex: texOne,
             palette: paletteOne,
@@ -70,27 +95,6 @@ export default class Preloader {
           const wOne = imgWrapper.cloneNode()
           const wElOne = imgEl.cloneNode()
           wElOne.src = assetOne
-
-          wElOne.addEventListener("click", () => {
-            console.log(meshOne)
-          })
-          let gsOne = meshOne.material.uniforms.grayscale
-          wElOne.addEventListener("mouseenter", () => {
-            piezo({
-              targets: gsOne,
-              value: 1,
-              duration: 700,
-              easing: "easeOutExpo",
-            })
-          })
-          wElOne.addEventListener("mouseleave", () => {
-            piezo({
-              targets: gsOne,
-              value: 2,
-              duration: 700,
-              easing: "easeOutExpo",
-            })
-          })
 
           wOne.appendChild(wElOne)
 
@@ -106,36 +110,17 @@ export default class Preloader {
             const paletteTwo = images[index + 1].image.palette
             const dimensionsTwo = images[index + 1].image.dimensions
             const texTwo = await this.loadTexture(assetTwo)
+            STORE.canvas.initTexture(texTwo)
             const elementTwo = {
               tex: texTwo,
               palette: paletteTwo,
               dimensions: dimensionsTwo,
             }
             const meshTwo = this.loadMesh(elementTwo)
+
             const wTwo = imgWrapper.cloneNode()
             const wElTwo = imgEl.cloneNode()
             wElTwo.src = assetTwo
-
-            wElTwo.addEventListener("click", () => {
-              console.log(meshTwo)
-            })
-            let gsTwo = meshTwo.material.uniforms.grayscale
-            wElTwo.addEventListener("mouseenter", () => {
-              piezo({
-                targets: gsTwo,
-                value: 1,
-                duration: 700,
-                easing: "easeOutExpo",
-              })
-            })
-            wElTwo.addEventListener("mouseleave", () => {
-              piezo({
-                targets: gsTwo,
-                value: 0,
-                duration: 700,
-                easing: "easeOutExpo",
-              })
-            })
 
             wTwo.appendChild(wElTwo)
 
@@ -149,6 +134,18 @@ export default class Preloader {
         }
         STORE.home.webgl = meshArray
         STORE.home.media = mediaArray
+        STORE.home.materialArray = this.materialArray
+        STORE.home.displayMesh = { element: display, mesh: displayMesh }
+        STORE.scene.add(displayMesh)
+
+        this.loadNav()
+        STORE.home.setAnimationPos()
+      }
+
+      if (STORE.router.pages["/info"]) {
+        const template = STORE.router.pages["/info"].template
+        // STORE.router.pages["/info"].setSplitText()
+        // STORE.router.pages[]
       }
 
       resolve()
@@ -179,15 +176,31 @@ export default class Preloader {
         texture: element.tex,
         imageBounds: [element.dimensions.width, element.dimensions.height],
         scale: [element.dimensions.width, element.dimensions.height],
-        grayscale: 0,
       })
 
+      this.materialArray.push(material)
+
       const mesh = new THREE.Mesh(plane, material.material)
-      // mesh.position.set(1, 1)
-      // mesh.scale.set(1, 1)
       STORE.scene.add(mesh)
 
       return mesh
+    }
+  }
+
+  loadDisplay(element) {
+    if (element) {
+      const displayPlane = new THREE.PlaneGeometry(1, 1)
+      const displayMesh = new THREE.Mesh(displayPlane)
+
+      return displayMesh
+    }
+  }
+
+  loadNav() {
+    if (this.navWords) {
+      this.navWords.forEach((n) => {
+        n.parentElement.style.overflow = "hidden"
+      })
     }
   }
 

@@ -9,6 +9,7 @@ uniform sampler2D tex;
 uniform float zoom;
 uniform float grayscale;
 uniform float opacity;
+uniform vec2 mousePos;
 
 const vec3 luma = vec3(.299, 0.587, 0.114);
 
@@ -24,6 +25,8 @@ void main() {
   vec2 s = aspect(scale);
   vec2 i = aspect(imageBounds);
 
+  float distance = distance(vUv, mousePos);
+
   float rs = s.x / s.y;
   float ri = i.x / i.y;
 
@@ -35,5 +38,7 @@ void main() {
 
   vec2 zUv = (uv - vec2(0.5, 0.5)) / zoom + vec2(0.5, 0.5);
 
-  gl_FragColor = toGrayscale(texture2D(tex, zUv) * vec4(color, opacity), grayscale);
+  // gl_FragColor = toGrayscale(texture2D(tex, zUv) * vec4(color, opacity), grayscale);
+  gl_FragColor = texture2D(tex, zUv) * vec4(color, opacity);
+  // gl_FragColor.r = distance / 1.15;
 }

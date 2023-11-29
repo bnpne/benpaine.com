@@ -24,6 +24,7 @@ export default class ImageMaterial {
     this.grayscale = grayscale
     this.opacity = opacity
     this.transparent = transparent
+    this.mouse = [0, 0]
 
     this.init()
   }
@@ -42,6 +43,7 @@ export default class ImageMaterial {
         zoom: { value: this.zoom },
         grayscale: { value: this.grayscale },
         opacity: { value: this.opacity },
+        mousePos: { value: this.mouse },
       },
       transparent: this.transparent,
       vertexShader: vertexShader,

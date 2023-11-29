@@ -12,7 +12,7 @@ import Lenis from "@studio-freight/lenis"
 // Import your pages here
 // These will be loaded by the preloader
 import Home from "./pages/home"
-import About from "./pages/about"
+import Info from "./pages/info"
 
 // Admin
 import { renderStudio } from "sanity"
@@ -49,7 +49,7 @@ class App {
 
       this.pages = {
         "/": new Home(),
-        "/about": new About(),
+        "/info": new Info(),
       }
 
       STORE.router = new Router({
@@ -62,7 +62,7 @@ class App {
         pagesParent: this.pagesParent,
       })
 
-      this.canvas = new Canvas({ el: r })
+      STORE.canvas = new Canvas({ el: r })
 
       this.load()
     }
@@ -96,7 +96,9 @@ class App {
     this.linkListeners()
 
     STORE.preloadTimeline.play()
-    STORE.preloadTimeline.finished.then(() => STORE.preloader.destroy())
+    STORE.preloadTimeline.finished.then(() => {
+      STORE.preloader.destroy()
+    })
   }
 
   listeners() {
@@ -106,6 +108,16 @@ class App {
     window.addEventListener("popstate", this.popState.bind(this), {
       passive: true,
     })
+
+    window.addEventListener("mousemove", (e) => this.handleMouseMove(e), {
+      passive: true,
+    })
+  }
+
+  handleMouseMove(e) {
+    if (STORE.home) {
+      STORE.home.handleMouseMove(e)
+    }
   }
 
   linkListeners() {
@@ -143,12 +155,12 @@ class App {
   }
 
   resize() {
-    this.canvas && this.canvas.resize()
+    STORE.canvas && STORE.canvas.resize()
     STORE.router.tree.currentPage.resize()
   }
 
   loop() {
-    if (this.canvas) this.canvas.loop()
+    if (STORE.canvas) STORE.canvas.loop()
   }
 }
 

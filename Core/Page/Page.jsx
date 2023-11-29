@@ -27,23 +27,21 @@ export default class Page {
     // this.createAnima()
 
     this.created = true
-    this.createAnima()
+    // this.createAnima()
   }
 
 
-  createAnima() { }
+  init() { }
 
-  intro() { }
+  onInject() {
+    // This function is fired after injection onto the dom
+  }
 
   in() {
     return Promise.resolve()
   }
 
   out() {
-    this.animas.forEach((anima) => {
-      anima.out()
-    })
-
     return Promise.resolve()
   }
 
