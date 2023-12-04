@@ -1,5 +1,5 @@
 export default class SplitText {
-  constructor({ paragraph, lines = false, words = false }) {
+  constructor({paragraph, lines = false, words = false}) {
     this.para = paragraph
     this.lines = lines
     this.words = words
@@ -22,7 +22,7 @@ export default class SplitText {
     this.bounds = this.para.getBoundingClientRect()
 
     // Clear node
-    this.para.innerHTML = ""
+    this.para.innerHTML = ''
 
     this.createWords()
     this.build()
@@ -32,12 +32,12 @@ export default class SplitText {
 
   createWords() {
     const splitWords = this.splitWords(this.tempText)
-    const span = document.createElement("span")
-    span.style.overflow = "hidden"
+    const span = document.createElement('span')
+    span.style.overflow = 'hidden'
     const innerSpan = span.cloneNode()
-    span.style.display = "inline-block"
+    span.style.display = 'inline'
 
-    splitWords.forEach((w) => {
+    splitWords.forEach(w => {
       const ws = span.cloneNode()
       const is = innerSpan.cloneNode()
 
@@ -66,8 +66,8 @@ export default class SplitText {
 
     // Iterate through words and separate into lines
 
-    this.wordsArray.forEach((w) => {
-      const { top } = this.getPosition(w, this.para)
+    this.wordsArray.forEach(w => {
+      const {top} = this.getPosition(w, this.para)
 
       if (lineOffset === null || top - lineOffset >= lineThreshold) {
         lineOffset = top
@@ -79,26 +79,26 @@ export default class SplitText {
 
     // Remove inner html
 
-    this.para.innerHTML = ""
+    this.para.innerHTML = ''
 
     // Create line text element
 
-    wordsInEachLine.forEach((wa) => {
-      const span = document.createElement("span")
-      span.style.overflow = "hidden"
+    wordsInEachLine.forEach(wa => {
+      const span = document.createElement('span')
+      span.style.overflow = 'hidden'
       const innerSpan = span.cloneNode()
-      span.style.display = "inline-block"
+      span.style.display = 'block'
 
-      let lineString = ""
+      let lineString = ''
 
       wa.forEach((w, i) => {
         lineString += w.innerHTML
         if (i < wa.length) {
-          lineString += " "
+          lineString += ' '
         }
       })
 
-      if (lineString !== " ") {
+      if (lineString !== ' ') {
         const text = document.createTextNode(lineString)
 
         innerSpan.appendChild(text)
@@ -107,21 +107,21 @@ export default class SplitText {
       }
     })
 
-    this.linesArray.forEach((la) => {
+    this.linesArray.forEach(la => {
       this.para.appendChild(la)
     })
   }
 
   build() {
-    if (this.para.innerHTML !== "") {
-      this.para.innerHTML = ""
+    if (this.para.innerHTML !== '') {
+      this.para.innerHTML = ''
     }
     if (this.wordsArray) {
       this.wordsArray.forEach((w, i) => {
         this.para.appendChild(w)
 
         if (i < this.wordsArray.length) {
-          this.para.append(" ")
+          this.para.append(' ')
         }
       })
     }
@@ -138,11 +138,11 @@ export default class SplitText {
 
   getPosition(node, parent) {
     const parentRect = parent.getBoundingClientRect()
-    const { width, height, x, y } = node.getBoundingClientRect()
+    const {width, height, x, y} = node.getBoundingClientRect()
     const top = y - parentRect.y
     const left = x - parentRect.x
 
-    return { width, height, top, left }
+    return {width, height, top, left}
   }
 
   resize() {

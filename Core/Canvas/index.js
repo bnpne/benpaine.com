@@ -5,7 +5,7 @@ import fragmentShader from "./shaders/fragment.glsl"
 import STORE from "../Store"
 
 export default class Canvas {
-  constructor({ el }) {
+  constructor({el}) {
     this.el = el
 
     this.renderer = new THREE.WebGLRenderer({
@@ -18,6 +18,7 @@ export default class Canvas {
       height: window.innerHeight,
     }
     this.renderer.setSize(this.screen.width, this.screen.height)
+    this.renderer.autoClear = false;
     this.scene = new THREE.Scene()
 
     this.camera = new THREE.PerspectiveCamera(
@@ -42,8 +43,8 @@ export default class Canvas {
         derivatives: "#extension GL_OES_standard_derivatives : enable",
       },
       uniforms: {
-        resolution: { value: new THREE.Vector4() },
-        tex: { value: 0 },
+        resolution: {value: new THREE.Vector4()},
+        tex: {value: 0},
       },
       transparent: true,
       fragmentShader: fragmentShader,
@@ -55,10 +56,10 @@ export default class Canvas {
     STORE.screen = this.screen
     STORE.viewport = this.renderer
 
-    STORE.updateViewport = function (data) {
+    STORE.updateViewport = function(data) {
       this.viewport = data
     }
-    STORE.updateScreen = function (data) {
+    STORE.updateScreen = function(data) {
       this.screen = data
     }
 

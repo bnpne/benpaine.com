@@ -8,17 +8,43 @@
   src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
 }
 
+@font-face {
+  font-family: 'PP Editorial Old Regular';
+  src: url('/fonts/PPEditorialOld-Regular.otf') format('opentype');
+}
+
 @mixin bodyType {
-  font-family: 'PP Neue Montreal Medium';
+  // font-family: 'PP Editorial Old Regular';
+  font-family: 'Times New Roman', Times, serif;
   // leading-trim: both;
   // text-edge: cap;
   font-size: 1.6rem;
   font-style: normal;
-  font-weight: 500;
-  line-height: 1;
+  font-weight: 400;
+  line-height: 1.05;
   // text-transform: uppercase;
   // letter-spacing: .1em;
+
+  @media screen and (max-width: 768px) {
+    font-size: 3rem;
+  }
+
+  @media screen and (max-width: 390px) {
+    font-size: 7rem;
+  }
 }
+
+// @mixin bodyType {
+//   font-family: 'PP Neue Montreal Medium';
+//   // leading-trim: both;
+//   // text-edge: cap;
+//   font-size: 1.6rem;
+//   font-style: normal;
+//   font-weight: 500;
+//   line-height: 1;
+//   // text-transform: uppercase;
+//   // letter-spacing: .1em;
+// }
 
 // @mixin bodyType {
 //   font-family: Geist Mono;

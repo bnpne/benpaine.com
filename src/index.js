@@ -15,8 +15,8 @@ import Home from "./pages/home"
 import Info from "./pages/info"
 
 // Admin
-import { renderStudio } from "sanity"
-import { config } from "../Core/Admin"
+import {renderStudio} from "sanity"
+import {config} from "../Core/Admin"
 
 class App {
   constructor() {
@@ -43,7 +43,7 @@ class App {
       this.pagesParent = document.querySelector("#app")
       STORE.url = window.location.pathname
 
-      STORE.setUrl = function (data) {
+      STORE.setUrl = function(data) {
         this.url = data
       }
 
@@ -62,7 +62,7 @@ class App {
         pagesParent: this.pagesParent,
       })
 
-      STORE.canvas = new Canvas({ el: r })
+      STORE.canvas = new Canvas({el: r})
 
       this.load()
     }
@@ -89,7 +89,7 @@ class App {
       STORE.lenis.raf(time)
     }, 0)
 
-    STORE.lenis.on("scroll", ({ scroll }) => this.scroll())
+    STORE.lenis.on("scroll", ({scroll}) => this.scroll())
 
     // this.resize()
     this.listeners()

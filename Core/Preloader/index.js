@@ -1,32 +1,31 @@
-import STORE from "../Store"
-import Emitter from "../Emitter"
-import * as THREE from "three"
-import piezo from "../Utils"
-import { getHomeImages } from "../Utils/data"
-import ImageMaterial from "../Canvas/materials/imageMaterial"
+import STORE from '../Store'
+import Emitter from '../Emitter'
+import * as THREE from 'three'
+import piezo from '../Utils'
+import {getHomeImages} from '../Utils/data'
+import ImageMaterial from '../Canvas/materials/imageMaterial'
 
 export default class Preloader {
-  constructor({ el, pagesParent }) {
+  constructor({el, pagesParent}) {
     this.preloader = el
     this.pageParent = pagesParent
 
     this.navWords = Array.prototype.slice.call(
-      document.querySelectorAll("[data-word]")
+      document.querySelectorAll('[data-word]'),
     )
-
     this.em = new Emitter()
     this.pageLoaded = false
 
-    STORE.preloadTimeline = piezo.timeline({
-      easing: function () {
-        return function (x) {
-          return Math.sqrt(1 - Math.pow(x - 1, 2))
-        }
-      },
-      duration: 700,
-    })
-
-    STORE.preloadTimeline
+    STORE.preloadTimeline = piezo
+      .timeline({
+        easing: function () {
+          return function (x) {
+            return Math.sqrt(1 - Math.pow(x - 1, 2))
+          }
+        },
+        autoplay: false,
+        duration: 700,
+      })
       .add({
         targets: this.preloader,
         opacity: [1, 0],
@@ -35,9 +34,8 @@ export default class Preloader {
       .add({
         targets: this.navWords,
         delay: piezo.stagger(20),
-        translateY: ["100%", "0%"],
+        translateY: ['100%', '0%'],
       })
-    STORE.preloadTimeline.pause()
 
     this.load()
   }
@@ -52,39 +50,42 @@ export default class Preloader {
   }
 
   loadPages() {
-    return new Promise(async (resolve) => {
-      if (STORE.router.pages["/"]) {
-        STORE.home = STORE.router.pages["/"]
+    return new Promise(async resolve => {
+      if (STORE.router.pages['/']) {
+        STORE.home = STORE.router.pages['/']
         const template = STORE.home.template
-        const grid = template.querySelector(".home__grid")
-        const row = document.createElement("li")
-        row.classList.add("home__grid--row")
-        const imgWrapper = document.createElement("div")
-        imgWrapper.classList.add("home__grid--row__item")
-        const imgEl = document.createElement("img")
-        imgEl.classList.add("home__grid--row__item--img")
-        const display = template.querySelector(".home__display--item")
+        const grid = template.querySelector('.home__grid')
+        const row = document.createElement('li')
+        row.classList.add('home__grid--row')
+        const imgWrapper = document.createElement('div')
+        imgWrapper.classList.add('home__grid--row__item')
+        const imgEl = document.createElement('img')
+        imgEl.classList.add('home__grid--row__item--img')
+        const display = template.querySelector('.home__display--item')
 
         const displayMesh = this.loadDisplay(display)
         const displayMaterial = new THREE.MeshBasicMaterial({
           transparent: true,
           color: 0xf4f6f5,
         })
-        displayMaterial.name = "display__material"
+        displayMaterial.name = 'display__material'
         displayMesh.material = displayMaterial
 
         const images = await getHomeImages()
+        const IMG_TRANSFORM = `?auto=format&h=240&w=240`
+        const textureLoader = new THREE.TextureLoader()
 
         const meshArray = []
         const mediaArray = []
         this.materialArray = []
 
         for (let index = 0; index < images.length; index += 2) {
-          const assetOne = images[index].image.asset
+          const assetOne = images[index].image.asset + IMG_TRANSFORM
           const paletteOne = images[index].image.palette
           const dimensionsOne = images[index].image.dimensions
-          const texOne = await this.loadTexture(assetOne)
-          STORE.canvas.initTexture(texOne)
+          // const texOne = await this.loadTexture(assetOne)
+
+          const texOne = textureLoader.load(assetOne)
           const elementOne = {
             tex: texOne,
             palette: paletteOne,
@@ -106,11 +107,12 @@ export default class Preloader {
           mediaArray.push(wOne)
 
           if (images[index + 1]) {
-            const assetTwo = images[index + 1].image.asset
+            const assetTwo = images[index + 1].image.asset + IMG_TRANSFORM
             const paletteTwo = images[index + 1].image.palette
             const dimensionsTwo = images[index + 1].image.dimensions
-            const texTwo = await this.loadTexture(assetTwo)
-            STORE.canvas.initTexture(texTwo)
+            // const texTwo = await this.loadTexture(assetTwo)
+
+            const texTwo = textureLoader.load(assetTwo)
             const elementTwo = {
               tex: texTwo,
               palette: paletteTwo,
@@ -135,17 +137,15 @@ export default class Preloader {
         STORE.home.webgl = meshArray
         STORE.home.media = mediaArray
         STORE.home.materialArray = this.materialArray
-        STORE.home.displayMesh = { element: display, mesh: displayMesh }
+        STORE.home.displayMesh = {element: display, mesh: displayMesh}
         STORE.scene.add(displayMesh)
 
         this.loadNav()
         STORE.home.setAnimationPos()
       }
 
-      if (STORE.router.pages["/info"]) {
-        const template = STORE.router.pages["/info"].template
-        // STORE.router.pages["/info"].setSplitText()
-        // STORE.router.pages[]
+      if (STORE.router.pages['/info']) {
+        const template = STORE.router.pages['/info'].template
       }
 
       resolve()
@@ -164,7 +164,7 @@ export default class Preloader {
         undefined,
         function (err) {
           reject(err)
-        }
+        },
       )
     })
   }
@@ -181,6 +181,7 @@ export default class Preloader {
       this.materialArray.push(material)
 
       const mesh = new THREE.Mesh(plane, material.material)
+      mesh.frustumCulled = false
       STORE.scene.add(mesh)
 
       return mesh
@@ -198,14 +199,14 @@ export default class Preloader {
 
   loadNav() {
     if (this.navWords) {
-      this.navWords.forEach((n) => {
-        n.parentElement.style.overflow = "hidden"
+      this.navWords.forEach(n => {
+        n.parentElement.style.overflow = 'hidden'
       })
     }
   }
 
   loaded() {
-    this.em.emit("completed")
+    this.em.emit('completed')
   }
 
   destroy() {
