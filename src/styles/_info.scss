@@ -14,12 +14,12 @@
     gap: 5%;
 
     @media screen and (max-width: 768px) {
-      flex-direction: column;
       padding: 20rem 2rem 10rem;
     }
 
     @media screen and (max-width: 390px) {
-      padding: 30rem 2rem 10rem;
+      flex-direction: column;
+      padding: 30rem 2rem 50rem;
     }
 
     &--item {
@@ -29,7 +29,16 @@
       gap: 2rem;
 
       @media screen and (max-width: 768px) {
+        flex: 0 0 30%;
         gap: 4rem;
+      }
+
+      @media screen and (max-width: 390px) {
+        flex: 1;
+      }
+
+      &:nth-child(3) {
+        flex: 1;
       }
     }
   }

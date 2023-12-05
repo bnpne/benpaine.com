@@ -1,27 +1,23 @@
 @font-face {
-  font-family: 'Geist Mono';
-  src: url('/fonts/GeistMonoVariableVF.woff2') format('woff2');
-}
-
-@font-face {
   font-family: 'PP Neue Montreal Medium';
   src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'PP Editorial Old Regular';
-  src: url('/fonts/PPEditorialOld-Regular.otf') format('opentype');
+  font-family: 'Iosevka';
+  src: url('/fonts/iosevka-ss18-regular.ttc');
 }
 
 @mixin bodyType {
   // font-family: 'PP Editorial Old Regular';
-  font-family: 'Times New Roman', Times, serif;
+  // font-family: 'Times New Roman', Times, serif;
+  font-family: 'Iosevka';
   // leading-trim: both;
   // text-edge: cap;
   font-size: 1.6rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.05;
+  line-height: 1.2;
   // text-transform: uppercase;
   // letter-spacing: .1em;
 

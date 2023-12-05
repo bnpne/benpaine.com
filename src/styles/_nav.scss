@@ -26,34 +26,13 @@
     }
   }
 
-  &__links {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
+  &__item {
+    position: relative;
 
-    &--item {
-      &:nth-child(1) {
-        display: flex;
-        flex: 0 0 calc($main-col-width * 2);
-      }
-
-      &:nth-child(2) {
-        display: flex;
-        flex: calc($main-col-width * 5) 0 0;
-      }
-
-      &:nth-child(3) {
-        display: flex;
-        flex: calc($main-col-width) 0 0;
-      }
-
-      &:nth-child(4) {
-        display: flex;
-        flex: calc($main-col-width) 0 0;
+    &.sub {
+      @media screen and (max-width: 390px) {
+        display: none;
       }
     }
   }
 }
-

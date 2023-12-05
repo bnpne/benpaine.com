@@ -8,7 +8,7 @@ export async function getHomeImages() {
     //   '*[_type == "studyItems"]{image.asset->url}'
     // )
     let queryEncoded = encodeURIComponent(
-      `*[_type == "studyItems"]{websiteUrl, title, image{'asset': asset->url, 'palette': asset->metadata.palette, 'dimensions': asset->metadata.dimensions, 'lqip': asset->metadata.lqip, 'blurhash': asset->metadata.blurhash}}`,
+      `*[_type == "studyItems"]{_createdAt, websiteUrl, title, image{'asset': asset->url, 'palette': asset->metadata.palette, 'dimensions': asset->metadata.dimensions, 'lqip': asset->metadata.lqip, 'blurhash': asset->metadata.blurhash}}| order(_createdAt desc)`,
     )
     let queryUrl = URL + queryEncoded
     const {result} = await fetch(queryUrl).then(res => res.json())

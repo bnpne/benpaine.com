@@ -62,6 +62,9 @@ export default class Preloader {
         const imgEl = document.createElement('img')
         imgEl.classList.add('home__grid--row__item--img')
         const display = template.querySelector('.home__display--item')
+        const linkEl = template.querySelector('.home__display--link')
+        const linkTag = document.createElement('a')
+        linkTag.innerHTML = 'VIEW SITE'
 
         const displayMesh = this.loadDisplay(display)
         const displayMaterial = new THREE.MeshBasicMaterial({
@@ -83,14 +86,16 @@ export default class Preloader {
           const assetOne = images[index].image.asset + IMG_TRANSFORM
           const paletteOne = images[index].image.palette
           const dimensionsOne = images[index].image.dimensions
-          // const texOne = await this.loadTexture(assetOne)
+          const urlOne = images[index].websiteUrl
 
           const texOne = textureLoader.load(assetOne)
           const elementOne = {
             tex: texOne,
             palette: paletteOne,
             dimensions: dimensionsOne,
+            url: urlOne,
           }
+
           const meshOne = this.loadMesh(elementOne)
 
           const wOne = imgWrapper.cloneNode()
@@ -98,9 +103,7 @@ export default class Preloader {
           wElOne.src = assetOne
 
           wOne.appendChild(wElOne)
-
           const u = row.cloneNode()
-
           u.appendChild(wOne)
 
           meshArray.push(meshOne)
@@ -110,13 +113,14 @@ export default class Preloader {
             const assetTwo = images[index + 1].image.asset + IMG_TRANSFORM
             const paletteTwo = images[index + 1].image.palette
             const dimensionsTwo = images[index + 1].image.dimensions
-            // const texTwo = await this.loadTexture(assetTwo)
+            const urlTwo = images[index + 1].websiteUrl
 
             const texTwo = textureLoader.load(assetTwo)
             const elementTwo = {
               tex: texTwo,
               palette: paletteTwo,
               dimensions: dimensionsTwo,
+              url: urlTwo,
             }
             const meshTwo = this.loadMesh(elementTwo)
 
@@ -152,23 +156,6 @@ export default class Preloader {
     })
   }
 
-  loadTexture(el) {
-    const l = new THREE.TextureLoader()
-
-    return new Promise((resolve, reject) => {
-      l.load(
-        el,
-        function (tex) {
-          resolve(tex)
-        },
-        undefined,
-        function (err) {
-          reject(err)
-        },
-      )
-    })
-  }
-
   loadMesh(element) {
     if (element) {
       const plane = new THREE.PlaneGeometry(1, 1)
@@ -178,8 +165,10 @@ export default class Preloader {
         scale: [element.dimensions.width, element.dimensions.height],
       })
 
-      this.materialArray.push(material)
+      material.material.userData.palette = element.palette
+      material.material.userData.url = element.url
 
+      this.materialArray.push(material)
       const mesh = new THREE.Mesh(plane, material.material)
       mesh.frustumCulled = false
       STORE.scene.add(mesh)

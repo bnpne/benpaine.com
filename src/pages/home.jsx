@@ -10,6 +10,7 @@ function homeHtml() {
         <ul class="home__grid"></ul>
         <div class="home__display">
           <div class="home__display--item"></div>
+          <div class="home__display--link"></div>
         </div>
       </div>
     </section>
@@ -26,6 +27,7 @@ export default class Home extends Page {
   }
 
   init() {
+    this.addListeners()
     STORE.preloadTimeline.add(
       {
         targets: this.animaArray,
@@ -46,7 +48,6 @@ export default class Home extends Page {
     this.animaArray = []
     STORE.animaPosY = []
     this.updateDisplay()
-    this.addListeners()
     this.updateScale()
     this.updateX()
 
@@ -161,9 +162,15 @@ export default class Home extends Page {
   addListeners() {
     this.media.forEach((m, i) => {
       m.addEventListener('click', () => {
-        this.displayMesh.mesh.material = this.webgl[i].material.clone()
+        const clone = this.webgl[i].material.clone()
+        const url = clone.userData.url
+        this.displayMesh.mesh.material = clone
         const t = this.webgl[i].material.uniforms.tex.value.clone()
-        this.displayMesh.mesh.material.uniforms.tex.value = t
+        const src = t.source.data.src
+        const srcSplit = src.split('?')[0]
+        const l = new THREE.TextureLoader().load(srcSplit, tex => {
+          this.displayMesh.mesh.material.uniforms.tex.value = tex
+        })
       })
     })
   }

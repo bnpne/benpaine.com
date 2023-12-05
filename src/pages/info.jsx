@@ -10,7 +10,7 @@ function infoHtml() {
         <div class="info__container--item">
           <div data-para>
             Ben Paine is an Independent Developer and Designer based out of San
-            Diego, California. Working with clientele World-Wide and Remotely.
+            Diego, California. Working with clientele World Wide and Remotely.
             Ben Paine is represented by minimalism, brutalism, and fluid
             interaction.
           </div>
@@ -31,7 +31,7 @@ function infoHtml() {
           </div>
         </div>
         <div class="info__container--item">
-          <div data-para>Available January 2024 — Full-Time or Remote </div>
+          <div data-para>Available January 2024</div>
           <ul>
             <li>
               <a data-para href="mailto:bentppaine@gmail.com">
@@ -50,6 +50,39 @@ function infoHtml() {
                 href="https://www.instagram.com/bnpne/"
               >
                 Instagram.com
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="info__container--item">
+          <div data-para>Selected Projects:</div>
+          <ul>
+            <li>
+              <a
+                data-para
+                href="https://purplerockscissors.com/verticals/staff-augmentation"
+              >
+                Staff Augmentation Marketing Page — Purple, Rock, Scissors / Dev
+              </a>
+            </li>
+            <li>
+              <a data-para href="https://info.offpiste.life/">
+                Off-Piste Info — Abbr. Studios / Dev
+              </a>
+            </li>
+            <li>
+              <a data-para href="https://evermoreresort.com/">
+                Evermore Resort Website — Purple, Rock, Scissors / Dev
+              </a>
+            </li>
+            <li>
+              <a data-para href="https://lightswitchvideo.com/">
+                Lightswitch Video — Rogue Studio / Dev
+              </a>
+            </li>
+            <li>
+              <a data-para href="https://spgoff.com">
+                Spencer Goff Portfolio — Freelance / Design, Dev
               </a>
             </li>
           </ul>
