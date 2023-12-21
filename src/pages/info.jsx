@@ -8,6 +8,71 @@ function infoHtml() {
     <section id="page" class="info">
       <div class="info__container">
         <div class="info__container--item">
+          <div data-para class="info__large">
+            66
+          </div>
+          <ul>
+            <li>
+              <a data-para href="tel:+16292032615">
+                +16292032615
+              </a>
+            </li>
+            <li>
+              <a data-para href="mailto:bentppaine@gmail.com">
+                bentppaine@gmail.com
+              </a>
+            </li>
+            <li>
+              <a data-para target="_blank" href="https://twitter.com/bn_pne">
+                X.com
+              </a>
+            </li>
+            <li>
+              <a
+                data-para
+                target="_blank"
+                href="https://www.instagram.com/bnpne/"
+              >
+                Instagram.com
+              </a>
+            </li>
+          </ul>
+          <ul>
+            <li data-para>Selected Projects:</li>
+            <li>
+              <a data-para href="https://info.offpiste.life">
+                Off-Piste Info
+              </a>
+            </li>
+            <li>
+              <a
+                data-para
+                href="https://purplerockscissors.com/verticals/staff-augmentation"
+              >
+                Purple Rock Scissors Staff Augmentation
+              </a>
+            </li>
+            <li>
+              <a data-para href="https://evermoreresort.com">
+                Evermore Resort
+              </a>
+            </li>
+            <li>
+              <a data-para href="https://dia.org">
+                Detroit Institute of Art
+              </a>
+            </li>
+            <li>
+              <a data-para href="https://lightswitchvideo.com/">
+                Lightswitch Video
+              </a>
+            </li>
+            <li>
+              <a data-para href="https://spgoff.com/">
+                Spencer Goff Portfolio
+              </a>
+            </li>
+          </ul>
           <div data-para>
             Ben Paine is an Independent Developer and Designer based out of San
             Diego, California. Working with clientele World Wide and Remotely.
@@ -30,63 +95,6 @@ function infoHtml() {
             me an email or drop a message via socials.
           </div>
         </div>
-        <div class="info__container--item">
-          <div data-para>Available January 2024</div>
-          <ul>
-            <li>
-              <a data-para href="mailto:bentppaine@gmail.com">
-                bentppaine@gmail.com
-              </a>
-            </li>
-            <li>
-              <a data-para target="_blank" href="https://twitter.com/bn_pne">
-                X.com
-              </a>
-            </li>
-            <li>
-              <a
-                data-para
-                target="_blank"
-                href="https://www.instagram.com/bnpne/"
-              >
-                Instagram.com
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="info__container--item">
-          <div data-para>Selected Projects:</div>
-          <ul>
-            <li>
-              <a
-                data-para
-                href="https://purplerockscissors.com/verticals/staff-augmentation"
-              >
-                Staff Augmentation Marketing Page — Purple, Rock, Scissors / Dev
-              </a>
-            </li>
-            <li>
-              <a data-para href="https://info.offpiste.life/">
-                Off-Piste Info — Abbr. Studios / Dev
-              </a>
-            </li>
-            <li>
-              <a data-para href="https://evermoreresort.com/">
-                Evermore Resort Website — Purple, Rock, Scissors / Dev
-              </a>
-            </li>
-            <li>
-              <a data-para href="https://lightswitchvideo.com/">
-                Lightswitch Video — Rogue Studio / Dev
-              </a>
-            </li>
-            <li>
-              <a data-para href="https://spgoff.com">
-                Spencer Goff Portfolio — Freelance / Design, Dev
-              </a>
-            </li>
-          </ul>
-        </div>
       </div>
     </section>
   )
@@ -104,8 +112,6 @@ export default class Info extends Page {
   }
 
   init() {
-    document.body.style = `color: rgb(244, 246, 245); background-color: rgb(21, 21, 21);`
-
     STORE.preloadTimeline.add(
       {
         targets: this.animaArray,
@@ -166,14 +172,14 @@ export default class Info extends Page {
           delay: piezo.stagger(25),
           translateY: ['125%', '0%'],
         })
-        .add(
-          {
-            targets: document.body,
-            color: 'rgb(244, 246, 245)',
-            backgroundColor: 'rgb(21, 21, 21)',
-          },
-          0,
-        )
+      // .add(
+      //   {
+      //     targets: document.body,
+      //     color: 'rgb(244, 246, 245)',
+      //     backgroundColor: 'rgb(21, 21, 21)',
+      //   },
+      //   0,
+      // )
     })
   }
 
@@ -196,14 +202,14 @@ export default class Info extends Page {
           delay: piezo.stagger(25, {from: 'last'}),
           translateY: ['0%', '125%'],
         })
-        .add(
-          {
-            targets: document.body,
-            backgroundColor: 'rgb(244, 246, 245)',
-            color: 'rgb(21, 21, 21)',
-          },
-          500,
-        )
+      // .add(
+      //   {
+      //     targets: document.body,
+      //     backgroundColor: 'rgb(244, 246, 245)',
+      //     color: 'rgb(21, 21, 21)',
+      //   },
+      //   500,
+      // )
     })
   }
 }

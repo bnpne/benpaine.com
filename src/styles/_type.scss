@@ -1,6 +1,11 @@
 @font-face {
-  font-family: 'PP Neue Montreal Medium';
-  src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
+  font-family: 'Fraktion Mono';
+  src: url('/fonts/PPFraktionMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fraktion';
+  src: url('/fonts/PPFraktionSans-Variable.ttf') format('truetype');
 }
 
 @font-face {
@@ -8,18 +13,25 @@
   src: url('/fonts/iosevka-ss18-regular.ttc');
 }
 
+@font-face {
+  font-family: 'FG';
+  src: url('/fonts/fg.otf');
+}
+
+@mixin displayType {
+  font-family: 'FG', Arial, Helvetica, sans-serif;
+  font-size: 12.5rem;
+  font-style: normal;
+  line-height: 100%;
+  letter-spacing: 0.025rem;
+}
+
 @mixin bodyType {
-  // font-family: 'PP Editorial Old Regular';
-  // font-family: 'Times New Roman', Times, serif;
-  font-family: 'Iosevka';
-  // leading-trim: both;
-  // text-edge: cap;
-  font-size: 1.6rem;
+  font-family: 'Fraktion Mono';
+  font-size: 2.4rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.2;
-  // text-transform: uppercase;
-  // letter-spacing: .1em;
 
   @media screen and (max-width: 768px) {
     font-size: 3rem;
@@ -29,27 +41,3 @@
     font-size: 7rem;
   }
 }
-
-// @mixin bodyType {
-//   font-family: 'PP Neue Montreal Medium';
-//   // leading-trim: both;
-//   // text-edge: cap;
-//   font-size: 1.6rem;
-//   font-style: normal;
-//   font-weight: 500;
-//   line-height: 1;
-//   // text-transform: uppercase;
-//   // letter-spacing: .1em;
-// }
-
-// @mixin bodyType {
-//   font-family: Geist Mono;
-//   // leading-trim: both;
-//   // text-edge: cap;
-//   font-size: 1.6rem;
-//   font-style: normal;
-//   font-weight: 500;
-//   line-height: 2rem;
-//   text-transform: uppercase;
-//   letter-spacing: .1em;
-// }

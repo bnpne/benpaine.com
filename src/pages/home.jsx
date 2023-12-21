@@ -2,16 +2,17 @@ import Page from '../../Core/Page/Page'
 import STORE from '../../Core/Store'
 import piezo from '../../Core/Utils'
 import * as THREE from 'three'
+import VS from '../../Core/Allez/vs'
+import R from '../../Core/R'
+import {lerp} from '../../Core/Allez/math'
 
 function homeHtml() {
   return (
     <section id="page" class="home">
+      <div class="home__display"></div>
       <div class="home__container">
         <ul class="home__grid"></ul>
-        <div class="home__display">
-          <div class="home__display--item"></div>
-          <div class="home__display--link"></div>
-        </div>
+        <ul class="home__map"></ul>
       </div>
     </section>
   )
@@ -24,10 +25,23 @@ export default class Home extends Page {
 
   create() {
     super.create()
+
+    this.gridEl = this.template.querySelector('.home__grid')
+    this.mapEl = this.template.querySelector('.home__map')
+    this.nav = document.querySelector('#nav')
+    this.display = this.template.querySelector('.home__display')
+    this.display.style.display = 'none'
+
+    // this.toggle = document.querySelector('.toggle')
+    this.grid = true
+    this.isDisplayed = false
   }
 
   init() {
     this.addListeners()
+    this.getGridItemsPos()
+    this.getMapItemsPos()
+
     STORE.preloadTimeline.add(
       {
         targets: this.animaArray,
@@ -42,12 +56,20 @@ export default class Home extends Page {
 
   onInject() {
     this.setAnimationPos()
+    this.createDisplayBounds()
+    if (this.grid) {
+      this.mapEl.style.display = 'none'
+      this.gridEl.style.display = 'grid'
+    } else {
+      this.mapEl.style.display = 'block'
+      this.gridEl.style.display = 'none'
+    }
   }
 
   setAnimationPos() {
     this.animaArray = []
     STORE.animaPosY = []
-    this.updateDisplay()
+    STORE.animaPosX = []
     this.updateScale()
     this.updateX()
 
@@ -60,23 +82,30 @@ export default class Home extends Page {
           w.scale.y / 2 -
           (bounds.top / STORE.screen.height) * STORE.viewport.height
 
+        const x =
+          -(STORE.viewport.width / 2) +
+          w.scale.x / 2 +
+          (bounds.left / STORE.screen.width) * STORE.viewport.width
+
         w.position.y = -STORE.viewport.height
         w.material.uniforms.opacity.value = 1
 
         this.animaArray.push(w.position)
         STORE.animaPosY.push(y)
+        STORE.animaPosX.push(x)
       })
     }
   }
 
-  updateDisplay() {
-    if (this.displayMesh) {
-      const bounds = this.displayMesh.element.getBoundingClientRect()
+  getGridItemsPos() {
+    this.gridItemPos = []
+    this.media.forEach((m, i) => {
+      const bounds = m.getBoundingClientRect()
 
       const width = (STORE.viewport.width * bounds.width) / STORE.screen.width
+      STORE.scaleWidth = width
       const height =
         (STORE.viewport.height * bounds.height) / STORE.screen.height
-
       const x =
         -(STORE.viewport.width / 2) +
         width / 2 +
@@ -86,14 +115,22 @@ export default class Home extends Page {
         height / 2 -
         (bounds.top / STORE.screen.height) * STORE.viewport.height
 
-      this.displayMesh.mesh.scale.set(width, height)
-      this.displayMesh.mesh.position.set(x, y)
+      const pos = {width: width, height: height, x: x, y: y}
 
-      this.displayMesh.mesh.material = new THREE.MeshBasicMaterial({
-        transparent: true,
-        color: 0xf4f6f5,
-      })
-    }
+      this.gridItemPos.push(pos)
+    })
+  }
+
+  getMapItemsPos() {
+    this.mapItemPos = []
+    const GOLDEN_RATIO = 1.618
+    // this.mapMedia.forEach((m, i) => {
+    //   const t = Math.pow(GOLDEN_RATIO, i) * 0.005
+    //   console.log(t)
+    //   const r = Math.floor(Math.random() * 9)
+    //   m.style.top = `${r}px`
+    //   m.style.left = `${t}px`
+    // })
   }
 
   updateScale() {
@@ -102,6 +139,7 @@ export default class Home extends Page {
         const bounds = m.getBoundingClientRect()
 
         const width = (STORE.viewport.width * bounds.width) / STORE.screen.width
+        STORE.scaleWidth = width
         const height =
           (STORE.viewport.height * bounds.height) / STORE.screen.height
 
@@ -111,68 +149,104 @@ export default class Home extends Page {
     }
   }
 
-  updateX() {
-    if (this.media) {
-      this.media.forEach((m, i) => {
+  updateX(input) {
+    this.media.forEach((m, i) => {
+      let x
+      if (input === undefined) {
         const bounds = m.getBoundingClientRect()
-
-        const x =
+        x =
           -(STORE.viewport.width / 2) +
           this.webgl[i].scale.x / 2 +
           (bounds.left / STORE.screen.width) * STORE.viewport.width
 
         this.webgl[i].position.x = x
-      })
-    }
+      } else {
+        this.webgl[i].position.x = input
+      }
+    })
   }
 
   updateY() {
-    if (this.media) {
-      this.media.forEach((m, i) => {
-        const bounds = m.getBoundingClientRect()
+    this.media.forEach((m, i) => {
+      let y
+      const bounds = m.getBoundingClientRect()
 
-        const y =
-          STORE.viewport.height / 2 -
-          this.webgl[i].scale.y / 2 -
-          (bounds.top / STORE.screen.height) * STORE.viewport.height
+      y =
+        STORE.viewport.height / 2 -
+        this.webgl[i].scale.y / 2 -
+        (bounds.top / STORE.screen.height) * STORE.viewport.height
 
-        this.webgl[i].position.y = y
-      })
-    }
+      this.webgl[i].position.y = y
+    })
   }
 
   createBounds() {
-    this.updateDisplay()
     this.updateScale()
     this.updateX()
     this.updateY()
   }
 
-  handleMouseMove(e) {
-    const {clientX, clientY} = e
+  createDisplayBounds() {
+    const scaleInPx = STORE.screen.width * 0.4
 
-    const x = (clientX / STORE.screen.width) * 2 - 1
-    const y = -(clientY / STORE.screen.height) * 2 + 1
+    const width = (STORE.viewport.width * scaleInPx) / STORE.screen.width
+    const height = (STORE.viewport.height * scaleInPx) / STORE.screen.height
 
-    this.webgl.forEach(w => {
-      w.material.uniforms.mousePos.value = [clientX, clientY]
-    })
+    this.displayMesh.scale.set(width, height)
   }
 
   addListeners() {
     this.media.forEach((m, i) => {
       m.addEventListener('click', () => {
+        this.isDisplayed = true
+        STORE.lenis.stop()
+        this.display.style.display = 'block'
+
+        this.webgl.forEach((w, i) => {
+          w.material.uniforms.opacity.value = 0
+        })
+
         const clone = this.webgl[i].material.clone()
-        const url = clone.userData.url
-        this.displayMesh.mesh.material = clone
-        const t = this.webgl[i].material.uniforms.tex.value.clone()
-        const src = t.source.data.src
-        const srcSplit = src.split('?')[0]
-        const l = new THREE.TextureLoader().load(srcSplit, tex => {
-          this.displayMesh.mesh.material.uniforms.tex.value = tex
+        const IMG_TRANSFORM = `?auto=format&h=1920&w=1920`
+        const img = m.children[0].src
+
+        this.displayMesh.material = clone
+        this.displayMesh.material.uniforms.opacity.value = 1
+
+        const l = new THREE.TextureLoader().load(img + IMG_TRANSFORM, tex => {
+          this.displayMesh.material.uniforms.tex.value = tex
         })
       })
     })
+    this.display.addEventListener('click', () => {
+      this.isDisplayed = false
+      STORE.lenis.start()
+      this.display.style.display = 'none'
+
+      this.webgl.forEach((w, i) => {
+        w.material.uniforms.opacity.value = 1
+      })
+
+      const displayMaterial = new THREE.MeshBasicMaterial({opacity: 0})
+      this.displayMesh.material = displayMaterial
+    })
+    // this.gridEl.addEventListener('click', () => {
+    //   if (this.isDisplayed) {
+    //     console.log('out')
+    //   }
+    // })
+    // this.toggle.addEventListener('click', () => {
+    //   this.grid ? (this.grid = false) : (this.grid = true)
+    //   this.toggleGrid()
+    // })
+  }
+
+  toggleGrid() {
+    if (this.grid) {
+      this.toggle.innerHTML = 'Map'
+    } else {
+      this.toggle.innerHTML = 'Grid'
+    }
   }
 
   in() {
@@ -201,9 +275,6 @@ export default class Home extends Page {
 
   out() {
     return new Promise(resolve => {
-      const animaDisplay = this.displayMesh.mesh.material.uniforms
-        ? this.displayMesh.mesh.material.uniforms?.opacity
-        : this.displayMesh.mesh.material
       piezo
         .timeline({
           easing: function () {
@@ -221,27 +292,16 @@ export default class Home extends Page {
           delay: piezo.stagger(30, {from: 'last'}),
           y: -STORE.viewport.height,
         })
-        .add(
-          {
-            targets: animaDisplay,
-            complete: () => {
-              if (animaDisplay.opacity) {
-                animaDisplay.opacity = 0
-              }
-            },
-            duration: 300,
-            value: 0,
-          },
-          100,
-        )
     })
   }
 
   resize() {
+    this.getGridItemsPos()
     this.createBounds()
+    this.createDisplayBounds()
   }
 
-  scroll() {
+  scroll(scroll) {
     this.updateY()
   }
 }

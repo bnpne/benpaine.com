@@ -28,59 +28,46 @@ Code and Design by Ben Paine
 
     <title>Ben Paine</title>
   </head>
-  <body style="background-color: rgb(244, 246, 245); color: rgb(21, 21, 21)">
-    <div data-preloader class="pre">
-      <div class="pre--imgWrapper">
-        <img src="/images/word.gif" alt="" />
-      </div>
-    </div>
+  <body>
+    <div data-preloader class="pre"></div>
     <main id="main">
       <div id="app">
         <nav class="nav" id="nav">
           <div class="nav__container">
-            <div class="nav__container--colophan">
-              <div class="nav__item">
-                <a href="/">
-                  <span>
-                    <span data-word>Ben Paine</span>
-                  </span>
-                </a>
+            <p>
+              <span>
+                <span data-word>Ben Paine</span>
+              </span>
+            </p>
+            <div>
+              <a class="nav__container--link" href="/">
+                <span>
+                  <span id="selected" data-word>Work</span>
+                </span>
+              </a>
+              <div>
+                <span><span data-word>&nbsp;&sol;&nbsp;</span></span>
               </div>
-              <div class="nav__item sub">
-                <p>
-                  <span>
-                    <span data-word>Web Dev & Design</span>
-                  </span>
-                </p>
-              </div>
-            </div>
-            <div class="nav__container--links">
-              <div class="nav__item">
-                <a href="/"
-                  ><span><span data-word>Work,</span>&nbsp; </span>
-                </a>
-              </div>
-              <div class="nav__item">
-                <a href="/info"
-                  ><span
-                    ><span data-word>Info / Selected Projects</span>&nbsp;
-                  </span></a
-                >
-              </div>
-              <!-- <div class="nav__item"> -->
-              <!--   <a href="/" -->
-              <!--     ><span><span data-word>Writing</span>&nbsp;</span></a -->
-              <!--   > -->
+              <!-- <div> -->
+              <!--   <span> -->
+              <!--     <span class="toggle" data-word>Grid</span> -->
+              <!--   </span> -->
               <!-- </div> -->
+              <!-- <div> -->
+              <!--   <span><span data-word>&nbsp;&sol;&nbsp;</span></span> -->
+              <!-- </div> -->
+              <a class="nav__container--link" href="/info">
+                <span>
+                  <span id="info" data-word>Info</span>
+                </span>
+              </a>
             </div>
           </div>
         </nav>
       </div>
-
       <canvas id="r"></canvas>
     </main>
     <div id="admin"></div>
-
     <script type="module" src="/src/index.js" defer></script>
   </body>
 </html>

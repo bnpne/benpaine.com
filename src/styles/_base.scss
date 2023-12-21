@@ -107,6 +107,16 @@ html {
 }
 
 body {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll;
+}
+
+body ::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+
+body {
   margin: 0;
   overflow: hidden;
   min-height: 100vh;
@@ -116,10 +126,10 @@ body {
     text-decoration: none;
     cursor: pointer;
     &:hover {
-      color: $fire;
+      opacity: 0.5;
     }
 
-    transition: color 700ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: 200ms opacity cubic-bezier(0.215, 0.61, 0.355, 1);
   }
 }
 
@@ -179,7 +189,7 @@ li {
 }
 
 .hover--underline {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   z-index: 1;
@@ -195,8 +205,7 @@ li {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 0.25rem;
-    background-color: $main-text;
+    height: 0.6rem;
   }
 
   &::after {
@@ -208,8 +217,7 @@ li {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 0.25rem;
-    background-color: $main-text;
+    height: 0.6rem;
   }
 
   &:hover {
@@ -227,7 +235,7 @@ li {
 }
 
 .pre {
-  background-color: #151515;
+  background-color: #000;
   width: 100%;
   height: 100vh;
   position: absolute;

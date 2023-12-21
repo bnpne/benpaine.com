@@ -1,6 +1,6 @@
-import VS from "./vs"
-import { lerp } from "./math"
-import Emitter from "../Emitter"
+import VS from './vs'
+import {lerp} from './math'
+import Emitter from '../Emitter'
 
 const defaults = {
   el: document,
@@ -14,10 +14,10 @@ export default class Allez {
   constructor(options = {}) {
     Object.assign(this, defaults, options)
     if (history.scrollRestoration) {
-      history.scrollRestoration = "manual"
+      history.scrollRestoration = 'manual'
     }
     window.scrollTo(0, 0)
-    this.el = document.querySelector("[allez-scroll]")
+    this.el = document.querySelector('[allez-scroll]')
     this.html = document.documentElement
     this.windowHeight = window.innerHeight
     this.windowWidth = window.innerWidth
@@ -35,7 +35,7 @@ export default class Allez {
       scroll: 0,
       limit: this.html.offsetHeight,
       currentElements: this.currentElements,
-      direction: "D",
+      direction: 'D',
     }
 
     this.checkScroll = this.checkScroll.bind(this)
@@ -53,13 +53,13 @@ export default class Allez {
 
   init() {
     // Set default styles
-    this.html.style.overflow = "hidden"
-    this.html.style.overscrollBehavior = "none"
+    this.html.style.overflow = 'hidden'
+    this.html.style.overscrollBehavior = 'none'
 
     this.vs = new VS({
       el: this.el,
       touchMultiplier: 5,
-    }).on((e) => {
+    }).on(e => {
       if (this.stop) {
         return
       }
@@ -82,11 +82,11 @@ export default class Allez {
 
     if (this.sections) {
       // Get sections
-      const sections = this.el.querySelectorAll("[allez-section]")
+      const sections = this.el.querySelectorAll('[allez-section]')
       let elIndex = 0
       // Iterate through sections and add children
-      sections.forEach((section) => {
-        Array.from(section.children).forEach((el) => {
+      sections.forEach(section => {
+        Array.from(section.children).forEach(el => {
           const rect = el.getBoundingClientRect()
           const speed = el.dataset.speed || 1
 
@@ -119,10 +119,10 @@ export default class Allez {
 
     if (this.items) {
       // Get sections
-      const items = this.el.querySelectorAll("[allez-item]")
+      const items = this.el.querySelectorAll('[allez-item]')
       let elIndex = 0
       // Iterate through sections and add children
-      items.forEach((el) => {
+      items.forEach(el => {
         const rect = el.getBoundingClientRect()
         const speed = el.dataset.speed || 1
 
@@ -166,7 +166,7 @@ export default class Allez {
 
     this.isScrolling = true
     this.checkScroll()
-    this.html.classList.add("is-scrolling")
+    this.html.classList.add('is-scrolling')
   }
 
   stopScrolling() {
@@ -175,7 +175,7 @@ export default class Allez {
 
     this.isScrolling = false
     this.instance.scroll = Math.round(this.instance.scroll)
-    this.html.classList.remove("is-scrolling")
+    this.html.classList.remove('is-scrolling')
   }
 
   checkScroll() {
@@ -193,14 +193,14 @@ export default class Allez {
       }
 
       if (this.instance.delta >= this.instance.scroll) {
-        this.instance.direction = "D"
+        this.instance.direction = 'D'
       } else {
-        this.instance.direction = "U"
+        this.instance.direction = 'U'
       }
 
       const progress = this.instance.scroll / this.instance.limit
 
-      this.em.emit("tick", {
+      this.em.emit('tick', {
         progress: progress,
         lerp: this.instance.scroll,
         target: this.instance.delta,
@@ -229,7 +229,7 @@ export default class Allez {
       this.instance.scroll = lerp(
         this.instance.scroll,
         this.instance.delta,
-        this.lerp
+        this.lerp,
       )
     } else {
       if (this.instance.scroll > this.instance.limit) {
@@ -254,8 +254,8 @@ export default class Allez {
     const scrollTop = this.instance.scroll
     const scrollBottom = this.instance.scroll + this.windowHeight
 
-    Object.values(this.elements).forEach((el) => {
-      const { top, bottom } = el
+    Object.values(this.elements).forEach(el => {
+      const {top, bottom} = el
 
       if (el && !el.inView) {
         if (scrollTop < bottom && scrollBottom >= top) {
@@ -280,17 +280,17 @@ export default class Allez {
     this.elements[index].inView = true
     this.currentElements[index] = element
 
-    this.elements[index].el.style.opacity = "1"
+    this.elements[index].el.style.opacity = '1'
   }
 
   setOutOfView(element, index) {
     this.elements[index].inView = false
 
-    Object.keys(this.currentElements).forEach((el) => {
+    Object.keys(this.currentElements).forEach(el => {
       el === index && delete this.currentElements[el]
     })
 
-    this.elements[index].el.style.opacity = "0"
+    this.elements[index].el.style.opacity = '0'
   }
 
   transformElements() {
@@ -306,7 +306,7 @@ export default class Allez {
             element.el.style.transform = transform
           }
         }
-      }
+      },
     )
   }
 
@@ -323,10 +323,10 @@ export default class Allez {
 
     let mat = transform.match(/^translate3d\((.+)\)$/)
     if (mat) {
-      translate = mat ? parseFloat(mat[1].split(", ")[1]) : 0
+      translate = mat ? parseFloat(mat[1].split(', ')[1]) : 0
     } else {
       mat = transform.match(/^translate\((.+)\)$/)
-      translate = mat ? parseFloat(mat[1].split(", ")[1]) : 0
+      translate = mat ? parseFloat(mat[1].split(', ')[1]) : 0
     }
     return translate
   }
@@ -379,6 +379,6 @@ export default class Allez {
   destroy() {
     this.stopScrolling()
     this.vs.destroy()
-    window.removeEventListener("resize", this.checkResize, false)
+    window.removeEventListener('resize', this.checkResize, false)
   }
 }

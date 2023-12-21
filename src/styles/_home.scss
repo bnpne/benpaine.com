@@ -1,15 +1,29 @@
 @use 'type';
 
 .home {
+  position: relative;
   @include bodyType;
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
+
+  &__display {
+    position: fixed;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    cursor: zoom-out;
+    top: 0;
+    z-index: 10;
+  }
 
   &__container {
     box-sizing: border-box;
     width: 100%;
-    padding: 10rem 2rem;
-    display: flex;
+    position: relative;
+    padding: 0 8rem;
+    padding-bottom: 20vw;
+    padding-top: 15.2rem;
 
     @media screen and (max-width: 768px) {
       padding: 20rem 3.2rem 10rem;
@@ -21,183 +35,38 @@
   }
 
   &__grid {
-    flex: 0 0 70%;
     max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
+    display: grid;
+    grid-template-columns: repeat(5, 10vw);
+    gap: calc((100vw - 16rem - 50vw) / 4);
+    position: relative;
 
-    @media screen and (max-width: 768px) {
-      gap: 6rem;
-    }
-
-    @media screen and (max-width: 430px) {
-      flex: 1;
-
-      gap: 2rem;
-    }
-
-    &--row {
+    &--item {
       width: 100%;
-      height: 100%;
-      max-height: 7vw;
+      aspect-ratio: 1/1;
       display: flex;
-      flex-direction: row;
-      gap: 0.5rem;
+      align-items: start;
+      // background-color: green;
 
-      @media screen and (max-width: 430px) {
-        max-height: none;
-        height: 48vw;
-        gap: 20vw;
-      }
-
-      &__item {
-        aspect-ratio: 1/1;
-        height: 4vw;
-        max-height: 6vw;
-
-        @media screen and (max-width: 768px) {
-          height: 6vw;
-        }
-
-        @media screen and (max-width: 430px) {
-          max-height: 50vw;
-          height: 30vw;
-        }
-
-        &--img {
-          height: 100%;
-          width: 100%;
-          object-fit: cover;
-          opacity: 0;
-          cursor: pointer;
-        }
-      }
-
-      &:nth-child(5n + 1) {
-        .home__grid--row__item {
-          &:nth-child(1) {
-            margin-left: 0rem;
-            @media screen and (max-width: 430px) {
-              margin-left: 0rem;
-            }
-          }
-
-          &:nth-child(2) {
-            margin-left: 30rem;
-            @media screen and (max-width: 430px) {
-              margin-left: 0rem;
-            }
-          }
-        }
-      }
-
-      &:nth-child(5n + 2) {
-        .home__grid--row__item {
-          &:nth-child(1) {
-            margin-left: 10rem;
-            @media screen and (max-width: 430px) {
-              margin-left: 0rem;
-            }
-          }
-
-          &:nth-child(2) {
-            margin-left: 50rem;
-            @media screen and (max-width: 430px) {
-              margin-left: 0rem;
-            }
-          }
-        }
-      }
-
-      &:nth-child(5n + 3) {
-        .home__grid--row__item {
-          &:nth-child(1) {
-            margin-left: 10rem;
-            @media screen and (max-width: 430px) {
-              margin-left: 0rem;
-            }
-          }
-
-          &:nth-child(2) {
-            margin-left: 30rem;
-            @media screen and (max-width: 430px) {
-              margin-left: 0rem;
-            }
-          }
-        }
-      }
-
-      &:nth-child(5n + 4) {
-        .home__grid--row__item {
-          &:nth-child(1) {
-            margin-left: 5rem;
-            @media screen and (max-width: 430px) {
-              margin-left: 0rem;
-            }
-          }
-
-          &:nth-child(2) {
-            margin-left: 20rem;
-            @media screen and (max-width: 430px) {
-              margin-left: 0rem;
-            }
-          }
-        }
-      }
-
-      &:nth-child(5n + 5) {
-        .home__grid--row__item {
-          &:nth-child(1) {
-            margin-left: 15rem;
-            @media screen and (max-width: 430px) {
-              margin-left: 0rem;
-            }
-          }
-
-          &:nth-child(2) {
-            margin-left: 0rem;
-            @media screen and (max-width: 430px) {
-              margin-left: 0rem;
-            }
-          }
-        }
+      &__img {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        opacity: 0;
+        cursor: pointer;
       }
     }
   }
 
-  &__display {
-    flex: 0 0 30%;
+  &__map {
     position: relative;
-    width: 30%;
     height: 100%;
-    display: block;
-
-    @media screen and (max-width: 430px) {
-      display: none;
-    }
+    width: 100%;
 
     &--item {
-      aspect-ratio: 1/1;
-      width: 100%;
-      position: sticky;
-      top: 10rem;
-
-      @media screen and (max-width: 768px) {
-        top: 20rem;
-      }
-    }
-
-    &--link {
-      margin-top: 2rem;
-      display: block;
-      height: auto;
-
-      a {
-        height: auto;
-        width: 100%;
-        display: block;
-      }
+      position: absolute;
+      height: 10vw;
+      width: 10vw;
     }
   }
 }

@@ -54,25 +54,48 @@ export default class Preloader {
       if (STORE.router.pages['/']) {
         STORE.home = STORE.router.pages['/']
         const template = STORE.home.template
-        const grid = template.querySelector('.home__grid')
-        const row = document.createElement('li')
-        row.classList.add('home__grid--row')
-        const imgWrapper = document.createElement('div')
-        imgWrapper.classList.add('home__grid--row__item')
-        const imgEl = document.createElement('img')
-        imgEl.classList.add('home__grid--row__item--img')
-        const display = template.querySelector('.home__display--item')
-        const linkEl = template.querySelector('.home__display--link')
-        const linkTag = document.createElement('a')
-        linkTag.innerHTML = 'VIEW SITE'
 
-        const displayMesh = this.loadDisplay(display)
-        const displayMaterial = new THREE.MeshBasicMaterial({
-          transparent: true,
-          color: 0xf4f6f5,
-        })
-        displayMaterial.name = 'display__material'
-        displayMesh.material = displayMaterial
+        // Main Grid
+        const grid = template.querySelector('.home__grid')
+        const item = document.createElement('li')
+        item.classList.add('home__grid--item')
+        const imgNode = document.createElement('img')
+        imgNode.classList.add('home__grid--item__img')
+
+        // Main Map
+        const map = template.querySelector('.home__map')
+        const mapItem = document.createElement('li')
+        mapItem.classList.add('home__map--item')
+
+        // Selected Grid
+        // const selected = template.querySelector('.home__selected')
+        // const selectedItem = document.createElement('li')
+        // selectedItem.classList.add('home__selected--item')
+        // const selectedImg = document.createElement('img')
+        // selectedImg.classList.add('home__selected--item__img')
+
+        // const row = document.createElement('li')
+        // row.classList.add('home__grid--row')
+        // const imgWrapper = document.createElement('div')
+        // imgWrapper.classList.add('home__grid--row__item')
+        // const imgEl = document.createElement('img')
+        // imgEl.classList.add('home__grid--row__item--img')
+        // const display = template.querySelector('.home__display--item')
+        // const linkEl = template.querySelector('.home__display--link')
+        // const linkTag = document.createElement('a')
+
+        // const toggleRow = template.querySelector('.home__row')
+        // const toggleItem = document.createElement('li')
+        // toggleItem.classList.add('home__row--item')
+        // linkTag.innerHTML = 'VIEW SITE'
+
+        // const displayMesh = this.loadDisplay(display)
+        // const displayMaterial = new THREE.MeshBasicMaterial({
+        //   transparent: true,
+        //   color: 0xf4f6f5,
+        // })
+        // displayMaterial.name = 'display__material'
+        // displayMesh.material = displayMaterial
 
         const images = await getHomeImages()
         const IMG_TRANSFORM = `?auto=format&h=240&w=240`
@@ -80,69 +103,60 @@ export default class Preloader {
 
         const meshArray = []
         const mediaArray = []
+        const mapArray = []
         this.materialArray = []
 
-        for (let index = 0; index < images.length; index += 2) {
-          const assetOne = images[index].image.asset + IMG_TRANSFORM
-          const paletteOne = images[index].image.palette
-          const dimensionsOne = images[index].image.dimensions
-          const urlOne = images[index].websiteUrl
+        images.forEach((image, i) => {
+          const asset = image.image.asset
+          const palette = image.image.palette
+          const dimensions = image.image.dimensions
+          const url = image.websiteUrl
 
-          const texOne = textureLoader.load(assetOne)
-          const elementOne = {
-            tex: texOne,
-            palette: paletteOne,
-            dimensions: dimensionsOne,
-            url: urlOne,
+          // Create Grid Node
+          const itemNode = item.cloneNode()
+          const img = imgNode.cloneNode()
+          img.src = asset
+
+          // Create Grid Node
+          const mapNode = mapItem.cloneNode()
+          mapArray.push(mapNode)
+
+          // Append Grid Node
+          itemNode.appendChild(img)
+          grid.appendChild(itemNode)
+          mediaArray.push(itemNode)
+
+          // Append Map Node
+          map.appendChild(mapNode)
+
+          // Create WebGL
+          const tex = textureLoader.load(asset + IMG_TRANSFORM)
+          const element = {
+            tex: tex,
+            palette: palette,
+            dimensions: dimensions,
+            url: url,
           }
 
-          const meshOne = this.loadMesh(elementOne)
+          const mesh = this.loadMesh(element)
+          meshArray.push(mesh)
+        })
 
-          const wOne = imgWrapper.cloneNode()
-          const wElOne = imgEl.cloneNode()
-          wElOne.src = assetOne
-
-          wOne.appendChild(wElOne)
-          const u = row.cloneNode()
-          u.appendChild(wOne)
-
-          meshArray.push(meshOne)
-          mediaArray.push(wOne)
-
-          if (images[index + 1]) {
-            const assetTwo = images[index + 1].image.asset + IMG_TRANSFORM
-            const paletteTwo = images[index + 1].image.palette
-            const dimensionsTwo = images[index + 1].image.dimensions
-            const urlTwo = images[index + 1].websiteUrl
-
-            const texTwo = textureLoader.load(assetTwo)
-            const elementTwo = {
-              tex: texTwo,
-              palette: paletteTwo,
-              dimensions: dimensionsTwo,
-              url: urlTwo,
-            }
-            const meshTwo = this.loadMesh(elementTwo)
-
-            const wTwo = imgWrapper.cloneNode()
-            const wElTwo = imgEl.cloneNode()
-            wElTwo.src = assetTwo
-
-            wTwo.appendChild(wElTwo)
-
-            u.appendChild(wTwo)
-
-            meshArray.push(meshTwo)
-            mediaArray.push(wTwo)
-          }
-
-          grid.appendChild(u)
-        }
         STORE.home.webgl = meshArray
         STORE.home.media = mediaArray
-        STORE.home.materialArray = this.materialArray
-        STORE.home.displayMesh = {element: display, mesh: displayMesh}
+        STORE.home.mapMedia = mapArray
+
+        const displayPlane = new THREE.PlaneGeometry(1, 1)
+        const displayMaterial = new THREE.MeshBasicMaterial({
+          opacity: 0,
+          color: 0x000000,
+        })
+        const displayMesh = new THREE.Mesh(displayPlane, displayMaterial)
+
+        displayMesh.frustumCulled = false
         STORE.scene.add(displayMesh)
+
+        STORE.home.displayMesh = displayMesh
 
         this.loadNav()
         STORE.home.setAnimationPos()
