@@ -25,12 +25,12 @@
     padding-bottom: 20vw;
     padding-top: 15.2rem;
 
-    @media screen and (max-width: 768px) {
-      padding: 20rem 3.2rem 10rem;
-    }
-
+    // @media screen and (max-width: 768px) {
+    //   padding: 20rem 8rem 10rem;
+    // }
+    //
     @media screen and (max-width: 430px) {
-      padding: 30rem 3.2rem 10rem;
+      padding-top: 45rem;
     }
   }
 
@@ -40,6 +40,11 @@
     grid-template-columns: repeat(5, 10vw);
     gap: calc((100vw - 16rem - 50vw) / 4);
     position: relative;
+
+    @media screen and (max-width: 430px) {
+      grid-template-columns: repeat(1, 100%);
+      gap: calc((100vw - 16rem - 50vw) / 4);
+    }
 
     &--item {
       width: 100%;

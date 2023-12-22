@@ -98,7 +98,11 @@ export default class Preloader {
         // displayMesh.material = displayMaterial
 
         const images = await getHomeImages()
-        const IMG_TRANSFORM = `?auto=format&h=240&w=240`
+        let IMG_TRANSFORM = `?auto=format&h=240&w=240`
+        if (window.mobileCheck()) {
+          IMG_TRANSFORM = `?auto=format&h=720&w=720`
+        }
+
         const textureLoader = new THREE.TextureLoader()
 
         const meshArray = []
@@ -149,7 +153,6 @@ export default class Preloader {
         const displayPlane = new THREE.PlaneGeometry(1, 1)
         const displayMaterial = new THREE.MeshBasicMaterial({
           opacity: 0,
-          color: 0x000000,
         })
         const displayMesh = new THREE.Mesh(displayPlane, displayMaterial)
 

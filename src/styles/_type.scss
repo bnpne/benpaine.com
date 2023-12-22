@@ -24,6 +24,10 @@
   font-style: normal;
   line-height: 100%;
   letter-spacing: 0.025rem;
+
+  @media screen and (max-width: 768px) {
+    font-size: 50rem;
+  }
 }
 
 @mixin bodyType {

@@ -187,7 +187,10 @@ export default class Home extends Page {
   }
 
   createDisplayBounds() {
-    const scaleInPx = STORE.screen.width * 0.4
+    let scaleInPx = STORE.screen.width * 0.4
+    if (window.mobileCheck()) {
+      scaleInPx = STORE.screen.width - 16
+    }
 
     const width = (STORE.viewport.width * scaleInPx) / STORE.screen.width
     const height = (STORE.viewport.height * scaleInPx) / STORE.screen.height
@@ -201,6 +204,7 @@ export default class Home extends Page {
         this.isDisplayed = true
         STORE.lenis.stop()
         this.display.style.display = 'block'
+        this.nav.style.display = 'none'
 
         this.webgl.forEach((w, i) => {
           w.material.uniforms.opacity.value = 0
@@ -222,6 +226,7 @@ export default class Home extends Page {
       this.isDisplayed = false
       STORE.lenis.start()
       this.display.style.display = 'none'
+      this.nav.style.display = 'block'
 
       this.webgl.forEach((w, i) => {
         w.material.uniforms.opacity.value = 1
